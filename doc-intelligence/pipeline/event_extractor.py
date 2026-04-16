@@ -137,14 +137,25 @@ def extract_events_from_chunk(chunk: dict) -> List[dict]:
     description = build_description(text)
 
     events = []
-    for date_info in dates[:3]:
+    # Group text by sentences to find which date belongs to which part of the text
+    sentences = re.split(r"[.!?\n؟،]", text)
+    
+    for date_info in dates:
+        # Find the sentence containing this date to build a better description
+        relevant_desc = description
+        for sent in sentences:
+            if date_info["raw"] in sent:
+                if len(sent) > 30:
+                    relevant_desc = sent.strip()
+                break
+                
         event_id = str(uuid.uuid4())[:8]
         event = {
             "event_id": event_id,
             "date_raw": date_info["raw"],
             "date_normalized": date_info["iso"],
             "event_type": event_type,
-            "description": description,
+            "description": relevant_desc,
             "actors": actors,
             "location": location,
             "source_file": chunk.get("file_name", ""),
@@ -155,7 +166,6 @@ def extract_events_from_chunk(chunk: dict) -> List[dict]:
             "confidence": round(date_info["confidence"] * 0.9, 2),
         }
         events.append(event)
-        break
 
     return events
 

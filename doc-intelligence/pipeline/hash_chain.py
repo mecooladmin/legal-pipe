@@ -241,8 +241,10 @@ def get_file_hashes_from_queue(queue: list) -> Dict[str, str]:
     for item in queue:
         fp = Path(item.get("path", ""))
         if fp.exists():
-            fid = item.get("file_id", fp.stem)
-            file_hashes[fid] = hash_file_bytes(fp)
+            # Use the 'id' field from the queue item, which is the 12-char MD5 hash
+            fid = item.get("id")
+            if fid:
+                file_hashes[fid] = hash_file_bytes(fp)
     return file_hashes
 
 

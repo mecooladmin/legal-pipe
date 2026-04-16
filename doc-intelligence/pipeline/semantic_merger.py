@@ -108,16 +108,25 @@ def semantic_cluster_events(
             emb_j = embeddings[j] if len(embeddings) > j else None
             if emb_i is None or emb_j is None:
                 continue
-
             sim = cosine_similarity(emb_i, emb_j)
-
+            
+            # If dates are exactly the same, we still require some semantic similarity
+            # to avoid merging completely different events on the same day.
+            # If dates are within a window but not same, we require higher similarity.
+            is_same_date = d1 == d2
+            
             same_type = events[i].get("event_type") == events[j].get("event_type")
-            threshold = MAX_SAME_TYPE_SIM if same_type else sim_threshold
-
+            
+            if is_same_date:
+                # Same day: allow lower threshold if same type, but still need 0.4+
+                threshold = 0.40 if same_type else sim_threshold
+            else:
+                # Different day (within window): require standard threshold
+                threshold = sim_threshold
+                
             if sim >= threshold:
                 assigned[j] = cluster_id
                 cluster.append(j)
-
         clusters.append(cluster)
         cluster_id += 1
 

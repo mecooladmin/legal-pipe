@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: legal-pipe
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run streamlit_app.py --server.port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: STREAMLIT_SERVER_PORT
+        value: 8501

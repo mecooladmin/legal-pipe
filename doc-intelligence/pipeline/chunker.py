@@ -16,7 +16,8 @@ MAX_CHUNK_WORDS = 800
 
 def normalize_text(text: str) -> str:
     text = re.sub(r"\s+", " ", text)
-    text = re.sub(r"[^\x20-\x7E\n]", " ", text)
+    # Allow Arabic characters and other non-ASCII printable characters
+    text = re.sub(r"[^\x20-\x7E\n\u0600-\u06FF]", " ", text)
     text = re.sub(r" {2,}", " ", text)
     return text.strip()
 

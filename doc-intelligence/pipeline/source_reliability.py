@@ -92,8 +92,8 @@ def build_reliability_map(queue_items: list) -> Dict[str, dict]:
     """Build and persist reliability map for all queued files."""
     reliability = {}
     for item in queue_items:
-        if item.get("status") != "done":
-            continue
+        # Allow building reliability map for pending items too, 
+        # so the legal pipeline can run immediately after ingestion
         file_id = item["id"]
         file_name = item.get("name", "")
         ext = item.get("ext", "")
