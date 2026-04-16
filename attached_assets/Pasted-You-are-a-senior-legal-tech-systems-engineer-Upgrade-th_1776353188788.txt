@@ -1,0 +1,275 @@
+You are a senior legal-tech systems engineer. Upgrade the existing Legal Intelligence System into a **court-admissible, forensically reliable case reconstruction engine**.
+
+This is not a feature upgrade — this is a **trust, auditability, and evidentiary integrity upgrade**.
+
+---
+
+# PRIMARY OBJECTIVE
+
+Ensure that every output:
+
+* is traceable
+* is reproducible
+* is non-tamperable
+* clearly distinguishes fact, claim, and uncertainty
+
+The system must withstand legal scrutiny.
+
+---
+
+# 1. EVIDENCE IMMUTABILITY LAYER (MANDATORY)
+
+For every stage, generate SHA256 hashes:
+
+* raw file → `file_hash`
+* extracted text → `text_hash`
+* chunk → `chunk_hash`
+* raw event → `event_hash`
+* merged event → `merged_event_hash`
+
+Store in:
+`/outputs/audit_hash_chain.json`
+
+Each record must link:
+
+```json
+{
+  "file_hash": "",
+  "chunk_hash": "",
+  "event_hash": "",
+  "merged_event_hash": "",
+  "parent": ""
+}
+```
+
+Rule:
+
+* Any modification must produce a new hash
+* Never overwrite previous hashes
+
+---
+
+# 2. EVENT VERSIONING SYSTEM (CRITICAL)
+
+Replace single merged events with **multi-version structures**:
+
+```json
+{
+  "merged_event_id": "",
+  "canonical_event": {
+    "resolved_date": "",
+    "confidence": 0.0
+  },
+  "versions": [
+    {
+      "event_id": "",
+      "date": "",
+      "source_file": "",
+      "page": "",
+      "source_weight": "",
+      "confidence": 0.0
+    }
+  ],
+  "conflict": true/false
+}
+```
+
+Rules:
+
+* NEVER discard conflicting versions
+* Preserve ALL original claims
+* Mark conflicts explicitly
+
+---
+
+# 3. CONFIDENCE-DRIVEN NARRATIVE ENGINE
+
+Rewrite narrative generation rules:
+
+Each sentence MUST:
+
+* reference ≥1 merged_event_id
+* reflect confidence level linguistically:
+
+| Confidence | Language Rule             |
+| ---------- | ------------------------- |
+| High       | “The records confirm…”    |
+| Medium     | “The documents indicate…” |
+| Low        | “There is an indication…” |
+
+STRICT RULE:
+
+* No definitive statements without high confidence
+
+---
+
+# 4. CONTRADICTION PRIORITIZATION ENGINE
+
+Enhance contradiction scoring:
+
+```text
+impact_score = severity × source_weight × frequency × semantic_similarity
+```
+
+Then:
+
+* Rank contradictions by impact_score
+* Mark:
+
+  * CRITICAL
+  * SIGNIFICANT
+  * MINOR
+
+UI must show CRITICAL first.
+
+---
+
+# 5. TIMELINE UNCERTAINTY MODEL
+
+Enhance timeline:
+
+Each event must include:
+
+* confidence score
+* date confidence
+* conflict flag
+
+Add:
+
+* uncertainty clusters (group low-confidence events)
+* conflicting date ranges highlighted
+
+---
+
+# 6. SOURCE RELIABILITY ENFORCEMENT
+
+Standardize weights:
+
+```json
+{
+  "high": "official/legal document",
+  "medium": "email/report",
+  "low": "informal/unclear"
+}
+```
+
+Rules:
+
+* High-weight sources override low-weight in ranking
+* NEVER delete low-weight evidence — only downgrade influence
+
+---
+
+# 7. FORENSIC AUDIT TRAIL (EXPANDED)
+
+Enhance audit trail:
+
+Each narrative sentence must map:
+
+```text
+Sentence → merged_event_id → event_ids → chunk_ids → file_hash
+```
+
+UI must allow:
+
+* click sentence → full reconstruction path
+
+---
+
+# 8. REPRODUCIBILITY MODE
+
+Add “deterministic mode”:
+
+* same input → same output
+* fixed:
+
+  * similarity thresholds
+  * merge window
+  * model parameters
+
+Store config in:
+`/outputs/run_config.json`
+
+---
+
+# 9. LEGAL EXPORT FORMAT (NEW)
+
+Generate:
+
+## A. legal_brief.md
+
+Structured as:
+
+* Case Overview
+* Agreed Facts (high confidence only)
+* Disputed Facts (conflicts only)
+* Chronological Timeline
+* Key Contradictions (ranked)
+* Evidence Appendix (with citations)
+
+---
+
+## B. evidence_index.json
+
+```json
+{
+  "event_id": "",
+  "sources": [
+    {
+      "file": "",
+      "page": "",
+      "hash": ""
+    }
+  ]
+}
+```
+
+---
+
+# 10. NON-HALLUCINATION ENFORCEMENT
+
+STRICT RULES:
+
+* No generated fact without source event
+* No merging without traceable similarity score
+* No narrative sentence without event reference
+* If uncertain → must say so explicitly
+
+---
+
+# 11. FAILURE SAFETY
+
+If:
+
+* confidence < threshold
+* missing date
+* conflicting high-weight sources
+
+Then:
+
+* flag for manual review
+* include in “Unresolved Issues” section
+
+---
+
+# SUCCESS CRITERIA
+
+The system is complete ONLY if:
+
+* Every claim is traceable to source
+* Every transformation is logged and hashed
+* Conflicts are preserved, not hidden
+* Narrative reflects uncertainty honestly
+* Outputs can be audited step-by-step
+
+---
+
+# FINAL INSTRUCTION
+
+Upgrade the existing system without breaking current functionality.
+
+Do NOT simplify logic.
+Do NOT remove existing features.
+
+Only enhance toward:
+**maximum trust, transparency, and legal defensibility**.

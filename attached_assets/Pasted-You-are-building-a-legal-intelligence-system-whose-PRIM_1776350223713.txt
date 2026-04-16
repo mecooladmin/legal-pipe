@@ -1,0 +1,121 @@
+You are building a legal intelligence system whose PRIMARY objective is:
+
+Reconstruct a complete, accurate, and chronological narrative of a legal case from 743 mixed-format documents (Arabic + English), with full citations.
+
+---
+
+## CORE OUTPUT REQUIREMENT
+
+Generate:
+
+1. A fully ordered timeline of events (date-sorted)
+2. Merged events across multiple documents
+3. Contradictions between sources
+4. A final **well-written legal narrative document** that:
+
+   * is chronological
+   * is structured
+   * includes citations (file + page)
+   * distinguishes facts vs claims
+
+---
+
+## CRITICAL NEW LAYER: EVENT RECONSTRUCTION ENGINE
+
+For EACH text chunk:
+
+Extract structured events:
+
+```json
+{
+  "event_id": "",
+  "date_raw": "",
+  "date_normalized": "YYYY-MM-DD",
+  "event_type": "meeting|contract|payment|incident|claim",
+  "description": "",
+  "actors": [],
+  "location": "",
+  "source_file": "",
+  "page": "",
+  "language": "ar|en",
+  "confidence": 0.0
+}
+```
+
+---
+
+## DATE NORMALIZATION (MANDATORY)
+
+* Handle:
+
+  * Arabic dates (e.g. ١٢ مارس ٢٠٢١)
+  * English formats
+* Convert ALL to ISO format
+
+---
+
+## EVENT MERGING LOGIC
+
+* Group events by:
+
+  * same date OR close dates
+  * similar semantic meaning
+* Merge into unified events
+* Preserve ALL citations
+
+---
+
+## CONTRADICTION DETECTION
+
+* Detect:
+
+  * conflicting dates
+  * conflicting claims
+* Flag clearly in output
+
+---
+
+## FINAL TIMELINE GENERATION
+
+* Sort all merged events by date
+* Output:
+
+  * timeline.json
+  * timeline.md (human-readable)
+
+---
+
+## FINAL LEGAL NARRATIVE
+
+Generate a structured document:
+
+Sections:
+
+* Case Overview
+* Chronological Events
+* Key Turning Points
+* Conflicting Evidence
+* Conclusion
+
+Each statement MUST include citations.
+
+---
+
+## PRIORITY ORDER
+
+1. Accuracy of timeline
+2. Correct date normalization
+3. Proper merging of events
+4. Clear narrative generation
+5. Performance optimization
+
+---
+
+## SUCCESS CRITERIA
+
+The system is successful ONLY if:
+
+* It reconstructs the case chronologically
+* It merges duplicate events across files
+* It handles Arabic + English correctly
+* It produces a readable legal document with citations
